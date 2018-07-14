@@ -36,7 +36,7 @@ const pro2 = function readFilePromisified(filename) {
   );
 };
 
-const aggregate = () => {
+const aggregate = () => new Promise((resolve) => {
   Promise.all([pro1(filepath1), pro2(filepath2)]).then((values) => {
     const myfile = values[0];
     const myfile2 = values[1];
@@ -78,7 +78,10 @@ const aggregate = () => {
       }
     }
     const j = JSON.stringify(obj);
-    fs.writeFileSync('./output/output.json', j);
+    fs.writeFile('./output/output.json', j, 'utf8', (err, data) => {
+      resolve(data);
+    });
   });
-};
+});
+
 module.exports = aggregate;
